@@ -109,7 +109,7 @@ function handleResponse(req, res, conf) {
 					}
 						
 					try {
-						respond(res, _.template(data, scope));
+						respond(res, _.template(data.toString(), scope));
 					}
 					catch(err) {
 						respond500(res, err);
