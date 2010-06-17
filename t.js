@@ -4,145 +4,173 @@ require('./vendor/underscore-min');
 
 var sys = require('sys'),
 	http = require('http'),
-	fs = require('fs');
+	fs = require('fs'),
+	url = require('url');
 
-var DEBUG = false,
-	ENCODING = 'utf-8',
+var ENCODING = 'utf-8',
 	TEMPLATES_DIR = './templates';
-
-process.addListener('SIGINT', function() {
-	sys.puts('\nShutting down..');
-	process.exit(0);
-});
-
-function parse(routes, url) {
-	if(!routes) {
-		throw Error('You need to provide some routes.')
-	}
 	
-	for(var path in routes) {
-		
-		var regex = new RegExp(path, ''),
-			matches = regex.exec(url);
 
-		if(matches) {
-			log('Route found! - '+ path);
-			
-			return {
-				matches: matches,
-				callback: routes[path]
-			};
-		}
-	}
+exports.app = function(conf) {
 	
-	log('Route not found - ' + url);
-	return null;
-}
+	var DEBUG = conf.debug;
+	
+	function log(arg) {
+		if(!!!DEBUG)
+			return;
 
-function respond(res, body, contentType, status) {
-	contentType = contentType || 'text/html';
-	body = body || '';
-	res.sendHeader(status || 200, {
-		'Content-Length': body.length,
-		'Content-Type' : contentType + '; charset=' + ENCODING
-	});
-	writeResponseBody(res, body);
-	res.end();
-}
+		switch (typeof arg) {
+			case 'object':
+				var str = '';
+				for (var k in arg) str += k + ': ' + arg[k] + '\n';
+				sys.puts(str);
 
-
-function writeResponseBody(res, body) {
-	res.write(body, ENCODING);
-}
-
-function respond404(res) {
-	respond(res,'<h1>404 Not Found</h1>', 'text/html', 404);
-}
-
-function respond500(res, error){
-	if(DEBUG)
-		log(error);
-		
-	respond(res, '<h1>500 Internal Server Error</h1>', 'text/html', 500);
-}
-
-function log(arg) {
-	if(!DEBUG)
-		return;
-
-	switch (typeof arg) {
-		case 'object':
-			var str = '';
-			for (var k in arg) {
-				str += k + ': ' + arg[k] + '\n';
-			}
-			sys.puts(str);
-			
-			break;
-		default:
-			sys.puts(arg);
-	}
-}
-
-function handleResponse(req, res, conf) {
-	var url = req.url;
-	var mapping = parse(conf.routes, url);
-	if (mapping) {
-		
-		var scope = {
-			respond: respond,
-			log: log
-		};
-		var args = [req, res].concat(mapping.matches.slice(1));
-		var retur = mapping.callback.apply(scope, args); 
-		switch(typeof retur) {
-			case 'string':
-			
-				var templateName = retur + '.html',
-					template = TEMPLATES_DIR + '/' + templateName;
-					
-				fs.readFile(template, function(err, data) {
-
-					if(err) {
-						log('Template missing - ' + retur + ' - ' + err);
-						respond500(res, err);
-					}
-						
-					try {
-						respond(res, _.template(data.toString(), scope));
-					}
-					catch(err) {
-						respond500(res, err);
-					}
-					
-				});
-				
 				break;
 			default:
-				respond(res, JSON.stringify(retur));
-				break;
+				sys.puts(arg);
 		}
-	}
-	else {
-		respond404(res);
-	}
-}
+	};
 
-exports.app = function(conf){
 
-	DEBUG = conf.debug || DEBUG;
+	var router = (function() {
+
+		var compiledRoutes = (function(routes) {
+			if(!routes) {
+				throw Error('You need to provide some routes.')
+			}
+			
+			var compiled = {};
+			for(var path in routes) {
+				compiled[path] = new RegExp(path, '');
+			}
+			return compiled;
+		})(conf.routes);
+
+		return {
+			parse : function(url) {
+				for(var path in compiledRoutes) {
+					var matches = compiledRoutes[path].exec(url);
+					if(matches) {
+						
+						log('Route found! - '+ url);
+						return {
+							matches: matches,
+							callback: conf.routes[path]
+						};
+					}	
+				}
+				
+				log('Route not found - ' + url);
+				return null;
+			}
+		};
+
+	})();
+
+	var templates = {
+		
+		serve: function(res, name, scope) {
+			
+			var file = name + '.html';
+			fs.readFile(TEMPLATES_DIR + '/' + file, function(error, data) {
+
+				if(error) {
+					log('Template missing - ' + name + ' - ' + error);
+					responder.respond500(res, error);
+				}
+
+				try {
+					responder.respond(res, _.template(data.toString(), scope));
+				}
+				catch(error) {
+					responder.respond500(res, error);
+				}
+
+			});
+		}
+	};
+	
+	var responder = (function() {
+
+		function respond(res, body, contentType, status) {
+			contentType = contentType || 'text/html';
+			body = body || '';
+			res.sendHeader(status || 200, {
+				'Content-Length': body.length,
+				'Content-Type' : contentType + '; charset=' + ENCODING
+			});
+			res.write(body, ENCODING);
+			res.end();
+		}
+
+		function respond404(res) {
+			respond(res,'<h1>404 Not Found</h1>', 'text/html', 404);
+		}
+
+		function respond500(res, error){
+			if(DEBUG)
+				log(error);
+
+			respond(res, '<h1>500 Internal Server Error</h1>', 'text/html', 500);
+		}
+
+		function handle(req, res, conf) {
+
+			var path = url.parse(req.url).pathname;
+			var mapping = router.parse(path);
+			if (mapping) {
+				
+				var userScope = {
+					respond: respond,
+					respond404: respond404,
+					respond500: respond500,
+					log: log
+				};
+
+				var userArguments = [req, res].concat(mapping.matches.slice(1));
+				var retur = mapping.callback.apply(userScope, userArguments); 
+				
+				switch(typeof retur) {
+					case 'string':
+						templates.serve(res, retur, userScope);
+						break;
+					default:
+						respond(res, JSON.stringify(retur));
+						break;
+				}
+			}
+			else {
+				respond404(res);
+			}
+		}
+
+		return {
+			respond: respond,
+			respond404: respond404,
+			respond500: respond500,
+			handle: handle
+		};
+
+	})();
+
 	var port = conf.port || 8888;
 	
 	http.createServer(function(req, res) {
 		
 		try {
-			handleResponse(req, res, conf);
+			responder.handle(req, res, conf);
 		} 
 		catch(e) {
-			respond500(res, e);
+			responder.respond500(res, e);
 		}
 		
 	}).listen(port);
 	
 	sys.puts('Starting server at http://127.0.0.1:' + port);
-}
+	
+	process.addListener('SIGINT', function() {
+		sys.puts('\nShutting down..');
+		process.exit(0);
+	});
+
+};
