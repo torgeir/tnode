@@ -1,0 +1,14 @@
+<html>
+<head>
+	<title>Welcome to tnode, <%= name %>!</title>
+</head>
+<body>
+	<h1>Again, welcome!</h1>
+	<div>
+		<%= partial('hello', {
+				name: name,
+				now: new Date()
+			}) %>
+	</div>
+</body>
+</html>
