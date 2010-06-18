@@ -5,7 +5,8 @@ require('./vendor/underscore-min');
 var sys = require('sys'),
 	http = require('http'),
 	fs = require('fs'),
-	url = require('url');
+	url = require('url'),
+	querystring = require("querystring");
 
 var ENCODING = 'utf-8',
 	TEMPLATES_DIR = './templates';
@@ -68,11 +69,11 @@ exports.app = function(conf) {
 	})();
 
 	var templates = {
-		
-		serve: function(res, name, scope) {
-			
-			var file = name + '.html';
-			fs.readFile(TEMPLATES_DIR + '/' + file, function(error, data) {
+		get: function(name) {
+			return TEMPLATES_DIR + '/' + name + '.html';
+		},
+		serve: function(res, name, scope, callback) {
+			fs.readFile(this.get(name), function(error, data) {
 
 				if(error) {
 					log('Template missing - ' + name + ' - ' + error);
@@ -90,8 +91,9 @@ exports.app = function(conf) {
 		}
 	};
 	
-	var responder = (function() {
 
+	var responder = (function() {
+		
 		function respond(res, body, contentType, status) {
 			contentType = contentType || 'text/html';
 			body = body || '';
@@ -120,24 +122,31 @@ exports.app = function(conf) {
 			var mapping = router.parse(path);
 			if (mapping) {
 				
-				var userScope = {
-					respond: respond,
-					respond404: respond404,
-					respond500: respond500,
-					log: log
+				var user = {
+					scope: {
+						respond: respond,
+						respond404: respond404,
+						respond500: respond500,
+						partial: function (name, scope) {
+							return _.template(fs.readFileSync(templates.get(name), ENCODING), scope || user.scope);
+						},
+						log: log
+					}
 				};
-
-				var userArguments = [req, res].concat(mapping.matches.slice(1));
-				var retur = mapping.callback.apply(userScope, userArguments); 
 				
+				var userArguments = [req, res].concat(mapping.matches.slice(1));
+				var retur = mapping.callback.apply(user.scope, userArguments); 
 				switch(typeof retur) {
 					case 'string':
-						templates.serve(res, retur, userScope);
+						templates.serve(res, retur, user.scope);
 						break;
-					default:
+					case 'object':
 						respond(res, JSON.stringify(retur));
 						break;
+					default:
+						break;
 				}
+				
 			}
 			else {
 				respond404(res);
@@ -156,7 +165,7 @@ exports.app = function(conf) {
 	var port = conf.port || 8888;
 	
 	http.createServer(function(req, res) {
-		
+
 		try {
 			responder.handle(req, res, conf);
 		} 

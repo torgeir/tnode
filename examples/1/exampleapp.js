@@ -1,14 +1,14 @@
-var t = require('../t');
+var t = require('../../t');
 
 t.app({
 	debug: true,
 	routes: {
 		'^/$' : function(req, res) {
-			this.respond(res, 'Welcome! Try <a href="/hello/you">this</a>, or <a href="/page/1/">this</a>!');
+			this.respond(res, '<h1>Welcome!</h1><p>Try <a href="/hello/you">this</a>, or <a href="/page/1">this</a>!');
 		},
-		'^/hello/([a-zA-Z]+)' : function(req, res, name) {
+		'^/hello/([a-z]+)/?' : function(req, res, name) {
 			this.name = name;
-			return 'hello';
+			return 'index';
 		},
 		'^/page/([0-9]+)/?$' : function(req, res, page) {
 			var json = { 
