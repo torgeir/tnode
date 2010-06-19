@@ -1,6 +1,4 @@
-// t library
-
-require('./vendor/underscore-min');
+// tnode
 
 var sys = require('sys'),
 	http = require('http');
