@@ -11,6 +11,7 @@ var sys = require('sys'),
 var ENCODING = 'utf-8',
 	TEMPLATES_DIR = './templates';
 	
+	
 
 exports.app = function(conf) {
 	
@@ -34,7 +35,6 @@ exports.app = function(conf) {
 
 
 	var router = (function() {
-
 		var compiledRoutes = (function(routes) {
 			if(!routes) {
 				throw Error('You need to provide some routes.')
@@ -42,21 +42,39 @@ exports.app = function(conf) {
 			
 			var compiled = {};
 			for(var path in routes) {
-				compiled[path] = new RegExp(path, '');
+				
+				var callback = routes[path];
+				var verb = 'GET';
+				var verbMatch = /^(GET|POST|PUT|DELETE|TRACE|CONNECT|HEAD|OPTIONS) .*/.exec(path);
+				if(verbMatch) {
+					verb = verbMatch[1];
+					path = path.substring(verb.length);
+				}
+				
+				compiled[path] = { 
+					verb: verb,
+					regex: new RegExp(path.trim(), ''),
+					callback: callback
+				};
 			}
+			
 			return compiled;
 		})(conf.routes);
 
 		return {
 			parse : function(url) {
+				
 				for(var path in compiledRoutes) {
-					var matches = compiledRoutes[path].exec(url);
+					var route = compiledRoutes[path];
+					
+					var matches = route.regex.exec(url);
 					if(matches) {
 						
-						log('Route found! - '+ url);
+						log('Route found! - ' + route.verb + ' - '+ url);
 						return {
-							matches: matches,
-							callback: conf.routes[path]
+							groups: matches,
+							method: route.verb,
+							callback: route.callback
 						};
 					}	
 				}
@@ -69,11 +87,11 @@ exports.app = function(conf) {
 	})();
 
 	var templates = {
-		get: function(name) {
+		find: function(name) {
 			return TEMPLATES_DIR + '/' + name + '.html';
 		},
 		serve: function(res, name, scope, callback) {
-			fs.readFile(this.get(name), function(error, data) {
+			fs.readFile(this.find(name), function(error, data) {
 
 				if(error) {
 					log('Template missing - ' + name + ' - ' + error);
@@ -104,6 +122,14 @@ exports.app = function(conf) {
 			res.write(body, ENCODING);
 			res.end();
 		}
+		
+		function redirect(res, location) {
+			res.sendHeader(302, {
+				'Content-Type' : 'text/html; charset=' + ENCODING,
+				'Location' : location
+			});
+			res.end();
+		}
 
 		function respond404(res) {
 			respond(res,'<h1>404 Not Found</h1>', 'text/html', 404);
@@ -115,30 +141,31 @@ exports.app = function(conf) {
 
 			respond(res, '<h1>500 Internal Server Error</h1>', 'text/html', 500);
 		}
-
+	
 		function handle(req, res, conf) {
 
 			var path = url.parse(req.url).pathname;
 			var mapping = router.parse(path);
-			if (mapping) {
+			
+			if (mapping && mapping.method == req.method) {
 				
-				var user = {
-					scope: {
-						respond: respond,
-						respond404: respond404,
-						respond500: respond500,
-						partial: function (name, scope) {
-							return _.template(fs.readFileSync(templates.get(name), ENCODING), scope || user.scope);
-						},
-						log: log
-					}
+				var scope = {
+					respond: respond,
+					redirect: redirect,
+					respond404: respond404,
+					respond500: respond500,
+					partial: function (name, scope) {
+						return _.template(fs.readFileSync(templates.find(name), ENCODING), scope || user.scope);
+					},
+					log: log
 				};
 				
-				var userArguments = [req, res].concat(mapping.matches.slice(1));
-				var retur = mapping.callback.apply(user.scope, userArguments); 
+				var userArguments = [req, res].concat(mapping.groups.slice(1));
+				var retur = mapping.callback.apply(scope, userArguments); 
+				
 				switch(typeof retur) {
 					case 'string':
-						templates.serve(res, retur, user.scope);
+						templates.serve(res, retur, scope);
 						break;
 					case 'object':
 						respond(res, JSON.stringify(retur));
