@@ -4,7 +4,7 @@ t.app({
 	debug: true,
 	routes: {
 		'^/$' : function(req, res) {
-			this.respond(res, '<h1>Welcome!</h1><p>Try <a href="/hello/you">this</a>, or <a href="/page/1">this</a>!');
+			this.respond('<h1>Welcome!</h1><p>Try <a href="/hello/you">this</a>, or <a href="/page/1">this</a>!');
 		},
 		'^/hello/([a-z]+)/?' : function(req, res, name) {
 			this.name = name;

@@ -7,7 +7,7 @@ t.app({
 			return 'form';
 		},
 		'POST /ionlyhandleposts': function(req, res) {
-			this.respond(res, 'POST is ok');
+			this.respond('POST is ok');
 		}
 	}
 })
