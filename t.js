@@ -16,12 +16,7 @@ var tnode = {
 		dispatcher.init(conf);
 	
 		http.createServer(function(req, res) {
-			try {
-				dispatcher.process(req, res);
-			} 
-			catch(e) {
-				responder.respond500(res, e);
-			}
+			dispatcher.process(req, res);
 		}).listen(port);
 
 		sys.puts('Starting server at http://127.0.0.1:' + port);
