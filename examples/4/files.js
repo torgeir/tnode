@@ -8,7 +8,7 @@ t.app({
 		},
 		'^/(web/js/.*)$' : t.serve, /* serves all files from web/js/ */
 		'^/favicon\.ico$' : function(req, res) {
-	        this.respond('Nothing to see here.');
+	        res.respond('Nothing to see here.');
 	    }
 	}
 })
