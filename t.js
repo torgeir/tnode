@@ -6,27 +6,31 @@ var sys = require('sys'),
 var dispatcher = require('./lib/dispatcher'),
 	responder = require('./lib/responder');
 
-exports.serve = responder.serveFile;
-exports.app = function(conf) {
+var tnode = {
+	serve : responder.serveFile,
+	app: function(conf) {
 	
-	DEBUG = conf.debug || false;
-	var port = conf.port || 8888;
+		DEBUG = conf.debug || false;
+		var port = conf.port || 8888;
 	
-	dispatcher.init(conf);
+		dispatcher.init(conf);
 	
-	http.createServer(function(req, res) {
-		try {
-			dispatcher.process(req, res);
-		} 
-		catch(e) {
-			responder.respond500(res, e);
-		}
-	}).listen(port);
+		http.createServer(function(req, res) {
+			try {
+				dispatcher.process(req, res);
+			} 
+			catch(e) {
+				responder.respond500(res, e);
+			}
+		}).listen(port);
 
-	sys.puts('Starting server at http://127.0.0.1:' + port);
+		sys.puts('Starting server at http://127.0.0.1:' + port);
 	
-	process.addListener('SIGINT', function() {
-		sys.puts('\nShutting down..');
-		process.exit(0);
-	});
+		process.addListener('SIGINT', function() {
+			sys.puts('\nShutting down..');
+			process.exit(0);
+		});
+	}
 };
+
+module.exports = tnode;
