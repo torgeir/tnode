@@ -14,13 +14,9 @@ var tnode = {
 		var port = conf.port || 8888;
 	
 		dispatcher.init(conf);
-	
-		http.createServer(function(req, res) {
-			dispatcher.process(req, res);
-		}).listen(port);
+		http.createServer(dispatcher.process).listen(port);
 
-		sys.puts('Starting server at http://127.0.0.1:' + port);
-	
+		sys.puts('Starting server at http://127.0.0.1:' + port);	
 		process.addListener('SIGINT', function() {
 			sys.puts('\nShutting down..');
 			process.exit(0);
