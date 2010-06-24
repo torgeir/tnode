@@ -17,15 +17,19 @@ Usage:
 * Running the examples
 
 	$ cd examples/1/
+	
 	$ node exampleapp.js
 
 	$ cd examples/2/
+	
 	$ node longpoll.js
 
 	$ cd examples/3/
+	
 	$ node verbs.js
 
 	$ cd examples/4/
+	
 	$ node files.js
 
 Todo
