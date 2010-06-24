@@ -25,10 +25,6 @@ with(test) {
             });
             assertEquals('test', response);
 		});
-		
-        test('Should respond with templates when user returns string', function() {
-            pending();
-        });
         
 	run();
 }
