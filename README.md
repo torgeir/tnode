@@ -6,15 +6,15 @@ tnode
 Usage:
 -----
 
-* Check out
+Check out
 
     git clone git://github.com/torgeir/tnode.git && cd tnode
 
-* Running the tests
+Running the tests
 
     make test
 
-* Running the examples
+Running the examples
 
     cd examples/1/	
     node exampleapp.js
