@@ -8,25 +8,33 @@ Usage:
 
 Check out
 
-    git clone git://github.com/torgeir/tnode.git && cd tnode
+    $ git clone git://github.com/torgeir/tnode.git && cd tnode
 
 Running the tests
 
-    make test
+    $ make test
 
 Running the examples
 
-    cd examples/1/	
-    node exampleapp.js
+1: Routing
 
-    cd examples/2/
-    node longpoll.js
+    $ cd examples/1/	
+    $ node exampleapp.js
 
-    cd examples/3/	
-    node verbs.js
+2: Long polling/"push"
 
-    cd examples/4/	
-    node files.js
+    $ cd examples/2/
+    $ node longpoll.js
+
+3: Http verbs
+
+    $ cd examples/3/	
+    $ node verbs.js
+
+4: Serving files
+
+    $ cd examples/4/	
+    $ node files.js
 
 Todo
 -----
