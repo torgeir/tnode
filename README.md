@@ -36,6 +36,11 @@ Running the examples
     $ cd examples/4/	
     $ node files.js
 
+5: REST-style urls
+
+    $ cd examples/5/	
+    $ node rest-style.js
+
 Todo
 -----
 - handle post requests
