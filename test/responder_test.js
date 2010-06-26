@@ -14,7 +14,7 @@ with(test) {
 		            actualResponse = body;
 		            actualEncoding = encoding;
 		        },
-		        sendHeader: function() {},
+		        writeHead: function() {},
 		        end: function() {}
 		    }
 		    
@@ -28,7 +28,7 @@ with(test) {
 		    var actualStatus,
 		        actualHeaders;
 		    var response = {
-		        sendHeader: function(status, headers) {
+		        writeHead: function(status, headers) {
 		            actualStatus = status;
 		            actualHeaders = headers;
 		        },
@@ -48,7 +48,7 @@ with(test) {
 		        write: function(body) {
 		            actualResponse = body;
 		        },
-		        sendHeader: function(status) {
+		        writeHead: function(status) {
 		            actualStatus = status;
 		        },
 		        end: function() {}
@@ -66,7 +66,7 @@ with(test) {
 		        write: function(body) {
 		            actualResponse = body;
 		        },
-		        sendHeader: function(status) {
+		        writeHead: function(status) {
 		            actualStatus = status;
 		        },
 		        end: function() {}
