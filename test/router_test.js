@@ -19,7 +19,7 @@ with(test) {
 		   router.init({
 		       '/': function() {}
 		   });
-		   var route = router.parse('/');
+		   var route = router.parse('GET', '/');
 		   assertTrue(route.method == 'GET');
 		   assertTrue(typeof route.callback == 'function');
 		});
@@ -28,7 +28,7 @@ with(test) {
 		   router.init({
 		       '^/article/([0-9]+)/page/([a-z]+)$': function() {}
 		   });
-		   var route = router.parse('/article/1/page/j');
+		   var route = router.parse('GET', '/article/1/page/j');
 		   log(route)
 		   assertTrue(route.method == 'GET');
 		   assertTrue(typeof route.callback == 'function');
@@ -48,19 +48,21 @@ with(test) {
 		});
     
 	testcase('Router - REST style routes');
+	
         test('Should map resources to rest style routes - list: GET /resource/?', function() {
 		    router.init({}, {
 		        blog: { list: function() {} }
 		    });
-		    var list = router.parse('/blog');
+		    var list = router.parse('GET', '/blog');
             assertEquals('GET', list.method);
             assertEquals('function', typeof list.callback);  
         });
+        
         test('Should map resources to rest style routes - get: GET /resource/([^\/]+)/?', function() {
 		    router.init({}, {
-		        blog: { get: function() {} }
+		        blog: { get: function() { } }
 		    });
-            var get = router.parse('/blog/1');
+            var get = router.parse('GET', '/blog/1');
             assertEquals('1', get.groups[1]);
             assertEquals('GET', get.method);
             assertEquals('function', typeof get.callback);
@@ -70,7 +72,7 @@ with(test) {
 		    router.init({}, {
 		        blog: { save: function() {} }
 		    });
-            var save = router.parse('/blog');
+            var save = router.parse('POST', '/blog');
             assertEquals('POST', save.method);
             assertEquals('function', typeof save.callback);
         });
@@ -79,7 +81,7 @@ with(test) {
 		    router.init({}, {
 		        blog: { update: function() {} }
 		    });
-            var update = router.parse('/blog/1');
+            var update = router.parse('PUT', '/blog/1');
             assertEquals('1', update.groups[1]);
             assertEquals('PUT', update.method);
             assertEquals('function', typeof update.callback);
@@ -89,7 +91,7 @@ with(test) {
 		    router.init({}, {
 		        blog: { destroy: function() {} }
 		    });
-            var destroy = router.parse('/blog');
+            var destroy = router.parse('DELETE', '/blog');
             assertEquals('DELETE', destroy.method);
             assertEquals('function', typeof destroy.callback);
         });        

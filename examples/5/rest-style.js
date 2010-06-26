@@ -4,9 +4,17 @@ t.app({
 	debug: true,
 	resources: {
 	    blog: {
-	        list: function(req, res) {
-	            res.respond('<h1>It works!</h1>');
-	        }
+	        list: function list(req, res) { res.respond('list') },
+	        get: function get(req, res, id) { res.respond('get ' + id) },
+	        save: function(req, res, data) { res.respond('save ' + JSON.stringify(data)) },
+	        update: function(req, res, data) { res.respond('update ' + JSON.stringify(data)) },
+	        destroy: function(req, res, data) { res.respond('destroy ' + JSON.stringify(data)) }
 	    }
+	},
+	routes: {
+	    '^/$': function(req, res) {
+	        return 'html';
+	    },
+	    '^/(js/.*)$': t.serve
 	}
 })

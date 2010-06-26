@@ -6,8 +6,8 @@ t.app({
 		'^/$': function() {
 			return 'form';
 		},
-		'POST /ionlyhandleposts': function(req, res) {
-			res.respond('POST is ok');
+		'POST /ionlyhandleposts': function(req, res, data) {
+			res.respond('POST is ok ' + JSON.stringify(data));
 		}
 	}
 })

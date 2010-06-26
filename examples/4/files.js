@@ -6,7 +6,7 @@ t.app({
 		'^/$': function(req, res) {
 			return 'index';
 		},
-		'^/(web/.*/.*)$' : t.serve, /* serves all files from web/js/ */
+		'^/(web/.*)$' : t.serve, /* serves all files from web/ */
 		'^/favicon\.ico$' : function(req, res) {
 	        res.respond('Nothing to see here.');
 	    }
