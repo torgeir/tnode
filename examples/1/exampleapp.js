@@ -4,19 +4,22 @@ t.app({
 	debug: true,
 	routes: {
 		'^/$' : function index(req, res) {
+		    this.title = 'Welcome!'
+		    this.name = 'Torgeir';
+			return 'welcome';
+		},
+		'GET ^/hello/(\\w+)/?' : function hello(req, res, name) {
 			res.respond([
-			    '<h1>Welcome!</h1><p>Try ',
-			    url('hello', 'this', 'you'),
-			    ', or ',
-			    url('page', 'this', 2),
-			    '!'
+			    '<h1>Again, welcome! ',
+			    name,
+			    ' this is raw html.. </h1><p>Try answering with ',
+			    url('page', 'json too', 2),
+			    '.</p><p>',
+			    url('index', 'Back to /'),
+			    '</p>'
 			].join(''));
 		},
-		'GET ^/hello/([a-z]+)/?' : function hello(req, res, name) {
-			this.name = name;
-			return 'index';
-		},
-		'^/page/([0-9]+)/?$' : function page(req, res, page) {
+		'^/page/(\\d+)/?$' : function page(req, res, page) {
 			var json = { 
 				page: page
 			};
