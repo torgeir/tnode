@@ -11,6 +11,7 @@ var tnode = {
 	app: function(conf) {
 	
 		DEBUG = conf.debug || false;
+	    DUMP_HEADERS = conf.dump_headers || false;
 		var port = conf.port || 8888;
 	
 		dispatcher.init(conf);
