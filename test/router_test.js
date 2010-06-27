@@ -29,7 +29,6 @@ with(test) {
 		       '^/article/([0-9]+)/page/([a-z]+)$': function() {}
 		   });
 		   var route = router.parse('GET', '/article/1/page/j');
-		   log(route)
 		   assertTrue(route.method == 'GET');
 		   assertTrue(typeof route.callback == 'function');
 		});
@@ -40,7 +39,7 @@ with(test) {
 		        '/article/([0-9]+)/': function articleByIndex() {},
 		        '/another/route': function() {}
 		    });
-		    assertEquals('<a href="/article/1/">text</a>', url('articleByIndex', 'text', 1));
+		    assertEquals('<a href="/article/1/">text</a>', link('articleByIndex', 'text', 1));
 		});
 		
 		test('Should look up routes using simple params', function() {

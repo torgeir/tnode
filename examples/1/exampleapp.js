@@ -13,9 +13,9 @@ t.app({
 			    '<h1>Again, welcome! ',
 			    name,
 			    ' this is raw html.. </h1><p>Try answering with ',
-			    url('page', 'json too', 2),
+			    link('page', 'json too', 2),
 			    '.</p><p>',
-			    url('index', 'Back to /'),
+			    link('index', 'Back to /'),
 			    '</p>'
 			].join(''));
 		},
