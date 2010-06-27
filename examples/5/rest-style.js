@@ -1,6 +1,7 @@
 var t = require('../../t');
 
 t.app({
+    dump_headers: true,
 	debug: true,
 	resources: {
 	    blog: {
