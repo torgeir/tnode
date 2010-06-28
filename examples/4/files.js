@@ -4,7 +4,7 @@ t.app({
 	debug: true,
 	routes: {
 		'^/$': function(req, res) {
-			return 'index';
+			res.template('index');
 		},
 		'^/(web/.*)$' : t.serve, /* serves all files from web/ */
 		'^/favicon\.ico$' : function(req, res) {

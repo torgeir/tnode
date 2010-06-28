@@ -14,7 +14,7 @@ t.app({
 	},
 	routes: {
 	    '^/$': function(req, res) {
-	        return 'html';
+	        res.template('html');
 	    },
 	    '^/(js/.*)$': t.serve
 	}

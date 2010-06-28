@@ -6,7 +6,8 @@ t.app({
 		'^/$' : function index(req, res) {
 		    this.title = 'Welcome!'
 		    this.name = 'Torgeir';
-			return 'welcome';
+		    
+		    res.template('welcome')
 		},
 		'GET ^/hello/(\\w+)/?' : function hello(req, res, name) {
 			res.respond([
@@ -23,7 +24,7 @@ t.app({
 			var json = { 
 				page: page
 			};
-			return json;
+			res.json(json);
 		}
 	}
 });
