@@ -1,8 +1,6 @@
 var test = require('../lib/test'),
 	color = require('../lib/color');
-
-DEBUG = true;
-
+                                                  
 with(test) {
 	testcase('Color');
 		

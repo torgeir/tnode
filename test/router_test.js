@@ -1,8 +1,7 @@
 var test = require('../lib/test'),
 	router = require('../lib/router');
 
-DEBUG = true;
-
+DEBUG = false;
 with(test) {
 
 	testcase('Router - routing');

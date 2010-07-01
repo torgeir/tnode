@@ -1,8 +1,6 @@
 var test = require('../lib/test'),
 	mime = require('../lib/mime');
-
-DEBUG = true;
-
+	
 with(test) {
 	testcase('Mime type should be resolved from file extension');
 		

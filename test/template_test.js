@@ -1,8 +1,6 @@
 var test = require('../lib/test'),
 	template = require('../lib/template');
 
-DEBUG = true;
-
 with(test) {
 	testcase('Template');
 		

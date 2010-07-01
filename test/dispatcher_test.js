@@ -1,8 +1,6 @@
 var test = require('../lib/test'),
 	dispatcher = require('../lib/dispatcher');
 
-DEBUG = true;
-
 with(test) {
 	testcase('Dispatcher');
 		

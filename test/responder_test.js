@@ -1,8 +1,6 @@
 var test = require('../lib/test'),
 	responder = require('../lib/responder');
 
-DEBUG = true;
-
 with(test) {
 	testcase('Responder');
 		
