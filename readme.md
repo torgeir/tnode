@@ -31,7 +31,7 @@ At this point no test-runner exists, but I would reckon something like the follo
 This is it!
 
     // app.js
-    var t = require('lib/tnode/t');
+    var t = require('./lib/tnode/t');
     t.app({
 	  routes: {
 		'/': function(req, res) {
