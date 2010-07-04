@@ -1,4 +1,6 @@
-<form action="/ionlyhandleposts" method="post">
-	<input type="submit" name="submit" value="This works.."/>
-</form>
-<p><a href="/ionlyhandleposts">This</a>, on the other hand, does not work.</p>
+form(action: '/ionlyhandleposts', method: 'post')
+  input(type: 'submit', name: 'submit', value: 'This works..')
+            
+p
+  a(href: '/ionlyhandleposts') get
+  |  on the other hand, does not work.

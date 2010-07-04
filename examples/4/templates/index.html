@@ -1,11 +1,11 @@
-<html>
-<head>
-	<title>serving files</title>
-	<script type="text/javascript" src="/web/js/jquery-1.4.2.js"></script>
-</head>
-<body>
-	<p style="display: none">if jQuery is loaded, this will fade in!</p>
-	<img src="/web/images/test.png" style="display: none;"/>
-	<script>$('p, img').fadeIn(1000)</script>
-</body>
-</html>
+!!!5
+html
+  head
+    title serving files
+    script(type: 'text/javascript', src: '/web/js/jquery-1.4.2.js')
+  body
+    <div style="display: none">
+    p if jQuery is loaded, this will fade in!
+    img(src:"/web/images/test.png")
+    </div>
+    <script>$('div').fadeIn(1000)</script>

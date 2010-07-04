@@ -1,2 +1,8 @@
-<p>Welcome, <strong><%= name %></strong>! This is a partial from another template..</p>
-<p>Did you know <%= now.getTime() %> seconds have passed since 1970?</p>
+p
+  | Welcome,
+  strong= name
+  | ! This is a partial from another template..
+p
+  | Did you know that
+  = now.getTime()
+  |  seconds have passed since 1970

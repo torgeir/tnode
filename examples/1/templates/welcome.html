@@ -1,8 +1,6 @@
-<h2>Welcome! This is a template!</h2>
-<div>
-	<%= partial('hello', {
-			name: name,
-			now: new Date()
-		}) %>
-</div>
-<div>Try <%= link('hello', 'answering with raw html too', name) %>!</div>
+h2 Welcome! This is a template!
+!= partial('hello', { name: name, now: new Date()})
+p
+  | Try
+  != link('hello', 'answering with raw html too', name)
+  | !
