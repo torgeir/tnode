@@ -1,6 +1,6 @@
 var t = require('../../t'),
 	events = require('events');
-	
+
 var bus = new events.EventEmitter(),
 	MESSAGE_EVENT = 'message_event';
 

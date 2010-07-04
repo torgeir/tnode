@@ -1,28 +1,17 @@
-<html>
-<head>
-	<script src="/js/jquery-1.4.2.js" type="text/javascript"></script>
-	<script type="text/javascript">
-		function ask(url, type, data) {
-			jQuery.ajax({ type: type, url: url, data: data, success: function(response) { alert(response) } });
-		}
-	</script>
-</head>
-<body>
-<h2>REST-style routes</h2>
-<p>
-	<a href="javascript:ask('blog', 'get')">list</a>
-</p>
-<p>
-	<a href="javascript:ask('blog/1', 'get')">get</a>
-</p>
-<p>
-	<a href="javascript:ask('blog', 'post', 'type=save')">save</a>
-</p>
-<p>
-	<a href="javascript:ask('blog/1', 'put', 'type=update')">update</a>
-</p>
-<p>
-	<a href="javascript:ask('blog', 'delete', 'type=destoy')">destroy</a>
-</p>
-</body>
-</html>
+html
+  head
+    | <script src="/js/jquery-1.4.2.js" type="text/javascript"></script>
+    | <script type="text/javascript">
+    |   function ask(url, type, data) {
+    |     jQuery.ajax({ type: type, url: url, data: data, success: function(response) {
+    |       alert(response) 
+    |     }});
+    |   }
+    | </script>
+  body
+    h2 REST-style routes
+    p <a href="javascript:ask('blog',   'get' )">List</a>
+    p <a href="javascript:ask('blog/1', 'get' )">Get</a>
+    p <a href="javascript:ask('blog',   'post',   'type=save')">Save</a>
+    p <a href="javascript:ask('blog/1', 'put',    'type=update')">Update</a>
+    p <a href="javascript:ask('blog',   'delete', 'type=desrtoy')">Destroy</a>

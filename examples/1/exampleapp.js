@@ -1,6 +1,6 @@
 var t = require('../../t');
 
-t.app({
+t.app({  
 	debug: true,
 	routes: {
 		'^/$' : function index(req, res) {

@@ -10,5 +10,5 @@ t.app({
 		'^/favicon\.ico$' : function(req, res) {
 	        res.respond('Nothing to see here.');
 	    }
-	}
-})
+  }
+});
