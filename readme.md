@@ -11,6 +11,7 @@ The coolest features of tnode is probably the **regex** and **rest-style routing
 ### Getting started
 
     $ git clone git://github.com/torgeir/tnode.git && cd tnode
+    $ git submodule init && git submodule update
                                                                                        
 ### Running the examples
 
@@ -18,7 +19,7 @@ tnode comes with examples describring most of its functionality, located in the 
 
     $ cd examples/1/ && node exampleapp.js
 
-Visit http://localhost:8888/
+Now, visit http://localhost:8888/
                                             
 ## Tests                                    
 
