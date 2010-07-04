@@ -17,6 +17,8 @@ The coolest features of tnode is probably the **regex** and **rest-style routing
 tnode comes with examples describring most of its functionality, located in the `examples/` folder. Each example can be started independently from their respective folder using `node the_example.js`. E.g.
 
     $ cd examples/1/ && node exampleapp.js
+
+Visit http://localhost:8888/
                                             
 ## Tests                                    
 
