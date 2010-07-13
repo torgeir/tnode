@@ -10,4 +10,4 @@ t.app({
 			res.respond('POST is ok ' + JSON.stringify(data));
 		}
 	}
-})
+}).listen(8888);

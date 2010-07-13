@@ -11,17 +11,23 @@ var tnode = {
 	app: function(conf) {
 	
 		DEBUG = conf.debug || false;
-	    DUMP_HEADERS = conf.dump_headers || false;
-		var port = conf.port || 8888;
-	
-		dispatcher.init(conf);
-		http.createServer(dispatcher.process).listen(port);
+    DUMP_HEADERS = conf.dump_headers || false;
 
-		sys.puts('Starting server at http://127.0.0.1:' + port);	
 		process.addListener('SIGINT', function() {
 			sys.puts('\nShutting down..');
 			process.exit(0);
-		});
+		});           
+	
+		dispatcher.init(conf);
+		var server = http.createServer(dispatcher.process);
+
+    var listen = server.listen;
+    server.listen = function() {
+  		sys.puts('Starting server at http://127.0.0.1:' + arguments[0]);	
+      listen.apply(server, arguments);
+    };
+		                                    
+		return server;
 	}
 };
 

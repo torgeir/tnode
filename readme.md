@@ -11,7 +11,7 @@ The coolest features of tnode is probably the **regex** and **rest-style routing
 ### Getting started
 
     $ git clone git://github.com/torgeir/tnode.git && cd tnode
-    $ git submodule init && git submodule update
+    $ git submodule update --init
                                                                                        
 ### Running the examples
 
@@ -39,7 +39,7 @@ This is it!
 		  res.respond('Yeah!');
 	    }
 	  }
-	});
+	}).listen(8888);
 
 Easy, aye? Run it using
                            
