@@ -11,7 +11,7 @@ The coolest features of tnode is probably the **regex** and **rest-style routing
 ### Getting started
 
     $ git clone git://github.com/torgeir/tnode.git && cd tnode
-    $ git submodule update --init
+    $ git submodule update --init --recursive
                                                                                        
 ### Running the examples
 
